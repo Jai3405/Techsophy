@@ -1,0 +1,40 @@
+# Vulnerable configuration file for testing
+database:
+  host: localhost
+  port: 5432
+  username: admin
+  password: admin123
+  database: production_db
+
+api:
+  api_key: sk-1234567890abcdefghijklmnop
+  secret_key: mysecretkey123
+  endpoint: https://api.example.com
+
+security:
+  debug_mode: true
+  ssl_verify: false
+  allow_all_origins: true
+  cors_allowed_origins: "*"
+
+aws:
+  access_key_id: AKIAIOSFODNN7EXAMPLE
+  secret_access_key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  region: us-east-1
+
+smtp:
+  host: smtp.example.com
+  port: 587
+  username: admin@example.com
+  password: emailpassword123
+
+oauth:
+  client_id: my-client-id
+  client_secret: very_secret_client_secret_12345
+
+# Insecure settings
+app:
+  secret_token: hardcoded_token_12345
+  private_key: "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA..."
+  enable_auth: false
+  log_level: DEBUG
