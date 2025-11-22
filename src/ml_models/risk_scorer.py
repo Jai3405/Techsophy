@@ -86,9 +86,38 @@ class RiskScorer:
         # Exposure (based on scanner type and file location)
         exposure = self._calculate_exposure(vuln)
 
-        return np.array(
-            [severity, confidence, vuln_type, exploitability, asset_value, exposure]
-        ).reshape(1, -1)
+        # Enhanced features (if model supports them)
+        if len(self.feature_names) == 16:
+            # Feature interactions
+            severity_x_exploitability = severity * exploitability
+            severity_x_confidence = severity * confidence
+            asset_value_x_exposure = asset_value * exposure
+
+            # Polynomial features
+            exploitability_squared = exploitability ** 2
+            severity_squared = severity ** 2
+
+            # Ratios
+            exploit_to_asset_ratio = exploitability / (asset_value + 1)
+            severity_to_confidence_ratio = severity / (confidence + 1)
+
+            # Boolean flags
+            is_critical = 1 if severity >= 4 else 0
+            is_high_exploit = 1 if exploitability >= 7 else 0
+            is_high_confidence = 1 if confidence == 3 else 0
+
+            return np.array([
+                severity, confidence, vuln_type, exploitability, asset_value, exposure,
+                severity_x_exploitability, severity_x_confidence, asset_value_x_exposure,
+                exploitability_squared, severity_squared,
+                exploit_to_asset_ratio, severity_to_confidence_ratio,
+                is_critical, is_high_exploit, is_high_confidence
+            ]).reshape(1, -1)
+        else:
+            # Original 6 features
+            return np.array(
+                [severity, confidence, vuln_type, exploitability, asset_value, exposure]
+            ).reshape(1, -1)
 
     def _calculate_exploitability(self, vuln: Dict[str, Any]) -> float:
         """Calculate exploitability score (0-10)."""
