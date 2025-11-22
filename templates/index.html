@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Security Scanner</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           DESIGN SYSTEM - Dark Theme with Muted Pastels
+           ═══════════════════════════════════════════════════════════ */
+
+        :root {
+            /* Color Palette */
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --bg-hover: #2f334d;
+
+            --color-primary: #7aa2f7;
+            --color-primary-hover: #89b4f8;
+            --color-success: #9ece6a;
+            --color-warning: #e0af68;
+            --color-danger: #f7768e;
+
+            --text-primary: #c0caf5;
+            --text-secondary: #9aa5ce;
+            --text-muted: #565f89;
+
+            --border-color: #414868;
+            --border-hover: #7aa2f7;
+
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro', 'Segoe UI', system-ui, sans-serif;
+
+            /* Spacing */
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 100px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+            /* Transitions */
+            --transition: 200ms ease;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESET & BASE STYLES
+           ═══════════════════════════════════════════════════════════ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CONTAINER & LAYOUT
+           ═══════════════════════════════════════════════════════════ */
+
+        .container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 100%;
+            padding: var(--spacing-2xl);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           HEADER
+           ═══════════════════════════════════════════════════════════ */
+
+        .header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto var(--spacing-lg);
+            color: var(--color-primary);
+        }
+
+        .header h1 {
+            color: var(--text-primary);
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FORM ELEMENTS
+           ═══════════════════════════════════════════════════════════ */
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            transition: all var(--transition);
+        }
+
+        .form-group input[type="text"]::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--border-hover);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px rgba(122, 162, 247, 0.1);
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-transform: none;
+            letter-spacing: normal;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: var(--spacing-sm);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--color-primary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           BUTTONS
+           ═══════════════════════════════════════════════════════════ */
+
+        .btn {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--color-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font-family);
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--color-primary-hover);
+            transform: scale(1.02);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            padding: 12px var(--spacing-lg);
+            background: var(--color-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            height: 40px;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            padding: 12px 20px;
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            height: 40px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-hover);
+        }
+
+        .btn-outlined {
+            padding: 10px 20px;
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            height: 36px;
+        }
+
+        .btn-outlined:hover {
+            background: rgba(122, 162, 247, 0.1);
+        }
+
+        /* Loading State */
+        .btn-loading {
+            position: relative;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           STATUS MESSAGES
+           ═══════════════════════════════════════════════════════════ */
+
+        .status-message {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin-top: var(--spacing-lg);
+            display: none;
+            font-size: 14px;
+        }
+
+        .status-message.success {
+            background: rgba(158, 206, 106, 0.15);
+            color: var(--color-success);
+            border: 1px solid rgba(158, 206, 106, 0.3);
+        }
+
+        .status-message.error {
+            background: rgba(247, 118, 142, 0.15);
+            color: var(--color-danger);
+            border: 1px solid rgba(247, 118, 142, 0.3);
+        }
+
+        .status-message.info {
+            background: rgba(122, 162, 247, 0.15);
+            color: var(--color-primary);
+            border: 1px solid rgba(122, 162, 247, 0.3);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESULTS CARD
+           ═══════════════════════════════════════════════════════════ */
+
+        .results-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 0;
+            margin-top: var(--spacing-xl);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Success Banner */
+        .success-banner {
+            background: rgba(158, 206, 106, 0.15);
+            border: 1px solid rgba(158, 206, 106, 0.3);
+            padding: var(--spacing-lg);
+            text-align: center;
+            color: var(--text-primary);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .success-banner .checkmark-wrapper {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .success-banner .checkmark {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-banner h2 {
+            margin: 0 0 var(--spacing-sm);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .success-banner p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .results-header h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        /* Reports Grid */
+        .reports-grid {
+            padding: var(--spacing-lg);
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .report-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .report-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 0 0 1px var(--border-hover);
+        }
+
+        .report-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .report-card-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .report-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .report-card-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 0 0 var(--spacing-sm);
+            word-break: break-all;
+        }
+
+        .report-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .report-type-badge.html {
+            background: rgba(122, 162, 247, 0.15);
+            color: var(--color-primary);
+        }
+
+        .report-type-badge.json {
+            background: rgba(224, 175, 104, 0.15);
+            color: var(--color-warning);
+        }
+
+        .report-card-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TOAST NOTIFICATIONS
+           ═══════════════════════════════════════════════════════════ */
+
+        .toast {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+            min-width: 250px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-color: rgba(158, 206, 106, 0.3);
+            background: rgba(158, 206, 106, 0.1);
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .toast-message {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════════════════════ */
+
+        .footer {
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color var(--transition);
+        }
+
+        .footer a:hover {
+            color: var(--color-primary-hover);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           UTILITY CLASSES
+           ═══════════════════════════════════════════════════════════ */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(26, 27, 38, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--bg-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════════════════ */
+
+        @media (max-width: 640px) {
+            body {
+                padding: var(--spacing-md);
+            }
+
+            .container {
+                padding: var(--spacing-lg);
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .results-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: stretch;
+            }
+
+            .results-header .btn-outlined {
+                width: 100%;
+            }
+
+            .report-card-actions {
+                flex-direction: column;
+            }
+
+            .report-card-actions > * {
+                width: 100%;
+            }
+
+            .success-banner {
+                padding: var(--spacing-md);
+            }
+
+            .reports-grid {
+                padding: var(--spacing-md);
+            }
+
+            .report-card {
+                padding: var(--spacing-md);
+            }
+
+            .toast {
+                left: var(--spacing-md);
+                right: var(--spacing-md);
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Lock Icon SVG -->
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <h1>DevOps Security Scanner</h1>
+            <p class="subtitle">AI-Powered Vulnerability Detection System</p>
+        </div>
+
+        <form id="scanForm">
+            <div class="form-group">
+                <label for="repoPath">Repository Path</label>
+                <input
+                    type="text"
+                    id="repoPath"
+                    name="repo_path"
+                    placeholder="/path/to/your/repository"
+                    value="test_repo"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Scan Types</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="scan_types" value="code" checked> Code Analysis
+                    </label>
+                    <label>
+                        <input type="checkbox" name="scan_types" value="dependency" checked> Dependencies
+                    </label>
+                    <label>
+                        <input type="checkbox" name="scan_types" value="container" checked> Container Security
+                    </label>
+                    <label>
+                        <input type="checkbox" name="scan_types" value="infrastructure" checked> Infrastructure
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="severityThreshold">Minimum Severity</label>
+                <select id="severityThreshold" name="severity_threshold">
+                    <option value="LOW" selected>Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                    <option value="CRITICAL">Critical</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="outputFormat">Report Format</label>
+                <select id="outputFormat" name="output_format">
+                    <option value="both" selected>JSON + HTML</option>
+                    <option value="json">JSON Only</option>
+                    <option value="html">HTML Only</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">Start Security Scan</span>
+                <span id="btnSpinner" class="hidden"><span class="spinner"></span> Scanning...</span>
+            </button>
+        </form>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <!-- Success Results Card -->
+        <div id="resultsCard" class="results-card">
+            <!-- Success Banner -->
+            <div class="success-banner">
+                <div class="checkmark-wrapper">
+                    <!-- Checkmark SVG -->
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2>Scan Completed Successfully</h2>
+                <p>Your security analysis is ready. View the detailed reports below.</p>
+            </div>
+
+            <!-- Results Header -->
+            <div class="results-header">
+                <h3>Generated Reports</h3>
+                <a href="#" class="btn-outlined" onclick="startNewScan(); return false;">
+                    <!-- Refresh SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>New Scan</span>
+                </a>
+            </div>
+
+            <!-- Reports Grid -->
+            <div class="reports-grid" id="reportsList"></div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer"></div>
+
+        <div class="footer">
+            <p>
+                <a href="/dashboard">View Dashboard</a> |
+                <a href="/docs">API Documentation</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('scanForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const statusMessage = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Disable button
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+
+            // Get form data
+            const formData = new FormData(form);
+
+            // Get selected scan types
+            const scanTypes = Array.from(formData.getAll('scan_types')).join(',');
+
+            // Build request body
+            const data = new URLSearchParams();
+            data.append('repo_path', formData.get('repo_path'));
+            data.append('scan_types', scanTypes);
+            data.append('severity_threshold', formData.get('severity_threshold'));
+            data.append('output_format', formData.get('output_format'));
+
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    body: data
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showStatus('success', `Scan started! Job ID: ${result.job_id}`);
+
+                    // Poll for status
+                    pollScanStatus(result.job_id);
+                } else {
+                    showStatus('error', `Error: ${result.detail || 'Failed to start scan'}`);
+                    resetButton();
+                }
+            } catch (error) {
+                showStatus('error', `Network error: ${error.message}`);
+                resetButton();
+            }
+        });
+
+        async function pollScanStatus(jobId) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/scan/${jobId}`);
+                    const job = await response.json();
+
+                    if (job.status === 'completed') {
+                        clearInterval(interval);
+                        showResults(job);
+                        resetButton();
+                    } else if (job.status === 'failed') {
+                        clearInterval(interval);
+                        showStatus('error', `Scan failed: ${job.error || 'Unknown error'}`);
+                        resetButton();
+                    } else {
+                        showStatus('info', `Status: ${job.status}...`);
+                    }
+                } catch (error) {
+                    clearInterval(interval);
+                    showStatus('error', `Error checking status: ${error.message}`);
+                    resetButton();
+                }
+            }, 2000);
+        }
+
+        function showStatus(type, message) {
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.innerHTML = message;
+            statusMessage.style.display = 'block';
+        }
+
+        function showResults(job) {
+            // Hide status message and form
+            statusMessage.style.display = 'none';
+            document.getElementById('scanForm').style.display = 'none';
+
+            // Build improved report cards
+            const reportsList = document.getElementById('reportsList');
+            reportsList.innerHTML = '';
+
+            if (job.report_files && job.report_files.length > 0) {
+                job.report_files.forEach(file => {
+                    const isHTML = file.endsWith('.html');
+                    const isJSON = file.endsWith('.json');
+
+                    // Create report card
+                    const reportCard = document.createElement('div');
+                    reportCard.className = 'report-card';
+
+                    // SVG Icons
+                    const htmlIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#7aa2f7" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>`;
+
+                    const jsonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#e0af68" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>`;
+
+                    const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>`;
+
+                    const downloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>`;
+
+                    const dashboardIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>`;
+
+                    reportCard.innerHTML = `
+                        <div class="report-card-header">
+                            <div class="report-card-icon">${isHTML ? htmlIcon : jsonIcon}</div>
+                            <div class="report-card-info">
+                                <h4 class="report-card-title">${file}</h4>
+                                <span class="report-type-badge ${isHTML ? 'html' : 'json'}">
+                                    ${isHTML ? 'HTML Report' : 'JSON Report'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="report-card-actions">
+                            ${isHTML ? `
+                                <a href="/reports/${file}" target="_blank" class="btn-primary" onclick="showToast('Opening report...', 'success')">
+                                    ${eyeIcon}
+                                    <span>View Report</span>
+                                </a>
+                            ` : `
+                                <a href="/api/reports/${file}" class="btn-primary" download onclick="handleDownload(event, '${file}')">
+                                    ${downloadIcon}
+                                    <span>Download</span>
+                                </a>
+                            `}
+                            <a href="/dashboard" class="btn-secondary">
+                                ${dashboardIcon}
+                                <span>Dashboard</span>
+                            </a>
+                        </div>
+                    `;
+
+                    reportsList.appendChild(reportCard);
+                });
+            }
+
+            // Show results card with animation
+            const resultsCard = document.getElementById('resultsCard');
+            resultsCard.style.display = 'block';
+
+            // Scroll to results smoothly
+            setTimeout(() => {
+                resultsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Handle download with loading state and toast
+        function handleDownload(event, filename) {
+            const button = event.currentTarget;
+
+            // Add loading state
+            button.classList.add('btn-loading');
+
+            // Show toast after brief delay
+            setTimeout(() => {
+                button.classList.remove('btn-loading');
+                showToast(`Downloaded ${filename}`, 'success');
+            }, 800);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+
+            const checkIcon = `<svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#9ece6a" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>`;
+
+            const infoIcon = `<svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#7aa2f7" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>`;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                ${type === 'success' ? checkIcon : infoIcon}
+                <div class="toast-message">${message}</div>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        function startNewScan() {
+            // Hide results card
+            document.getElementById('resultsCard').style.display = 'none';
+
+            // Show form
+            document.getElementById('scanForm').style.display = 'block';
+
+            // Reset form
+            form.reset();
+
+            // Restore default values
+            document.getElementById('repoPath').value = 'test_repo';
+            document.querySelectorAll('input[name="scan_types"]').forEach(cb => cb.checked = true);
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetButton() {
+            submitBtn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnSpinner.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
