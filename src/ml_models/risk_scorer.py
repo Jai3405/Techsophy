@@ -25,6 +25,7 @@ class RiskScorer:
         self.model_path = Path(model_path)
         self.model: RandomForestClassifier = None
         self.label_encoders: Dict[str, LabelEncoder] = {}
+        self.label_encoder = None  # For XGBoost models
         self.feature_names = [
             "severity",
             "confidence",
@@ -218,7 +219,13 @@ class RiskScorer:
 
         try:
             # Predict risk class
-            risk_class = self.model.predict(features)[0]
+            risk_class_pred = self.model.predict(features)[0]
+
+            # If using XGBoost with label encoder, decode it
+            if self.label_encoder is not None:
+                risk_class = self.label_encoder.inverse_transform([risk_class_pred])[0]
+            else:
+                risk_class = risk_class_pred
 
             # Get probability for confidence
             probabilities = self.model.predict_proba(features)[0]
@@ -322,6 +329,7 @@ class RiskScorer:
             model_data = joblib.load(self.model_path)
             self.model = model_data["model"]
             self.label_encoders = model_data.get("label_encoders", {})
+            self.label_encoder = model_data.get("label_encoder", None)  # For XGBoost
             self.feature_names = model_data.get("feature_names", self.feature_names)
             logger.info(f"Model loaded from {self.model_path}")
         except Exception as e:
