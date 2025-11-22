@@ -49,9 +49,12 @@ htmlcov/
 # *.joblib
 
 # Reports
-reports/
-*.html
-*.pdf
+reports/*.html
+reports/*.json
+reports/*.pdf
+
+# Allow templates
+!templates/*.html
 
 # Database
 *.db
