@@ -143,15 +143,25 @@ class ReportGenerator:
             ],
         )
 
-        # Severity pie chart
+        # Severity pie chart with better color sorting
         summary = self._generate_summary(vulnerabilities)
         severity_data = summary["by_severity"]
+
+        # Color mapping: CRITICAL (red) -> HIGH (orange) -> MEDIUM (yellow) -> LOW (blue) -> INFO (gray)
+        severity_colors = {
+            "CRITICAL": "#f7768e",  # Muted red - most dangerous
+            "HIGH": "#ff9e64",      # Muted orange - high priority
+            "MEDIUM": "#e0af68",    # Muted amber - medium priority
+            "LOW": "#7aa2f7",       # Muted blue - low risk
+            "INFO": "#565f89"       # Muted gray - informational
+        }
+
         fig.add_trace(
             go.Pie(
                 labels=list(severity_data.keys()),
                 values=list(severity_data.values()),
                 marker=dict(
-                    colors=["#dc3545", "#fd7e14", "#ffc107", "#17a2b8", "#6c757d"]
+                    colors=[severity_colors.get(k, "#565f89") for k in severity_data.keys()]
                 ),
             ),
             row=1,
@@ -165,7 +175,7 @@ class ReportGenerator:
             go.Bar(
                 x=[t[0] for t in sorted_types],
                 y=[t[1] for t in sorted_types],
-                marker_color="#0d6efd",
+                marker_color="#7aa2f7",
             ),
             row=1,
             col=2,
@@ -174,7 +184,7 @@ class ReportGenerator:
         # Risk score histogram
         risk_scores = [v.get("risk_score", 0) for v in vulnerabilities]
         fig.add_trace(
-            go.Histogram(x=risk_scores, nbinsx=10, marker_color="#198754"), row=2, col=1
+            go.Histogram(x=risk_scores, nbinsx=10, marker_color="#9ece6a"), row=2, col=1
         )
 
         # Scanner bar chart
@@ -183,18 +193,26 @@ class ReportGenerator:
             go.Bar(
                 x=list(scanner_data.keys()),
                 y=list(scanner_data.values()),
-                marker_color="#6f42c1",
+                marker_color="#bb9af7",
             ),
             row=2,
             col=2,
         )
 
-        # Update layout
+        # Update layout for dark theme
         fig.update_layout(
             height=800,
             showlegend=False,
             title_text="Security Vulnerability Analysis Dashboard",
+            title_font=dict(size=20, color="#c0caf5"),
+            paper_bgcolor="#24283b",
+            plot_bgcolor="#2f334d",
+            font=dict(color="#c0caf5", family="-apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro', 'Segoe UI', system-ui, sans-serif"),
         )
+
+        # Update axes for dark theme
+        fig.update_xaxes(gridcolor="#414868", zerolinecolor="#414868")
+        fig.update_yaxes(gridcolor="#414868", zerolinecolor="#414868")
 
         return fig.to_html(include_plotlyjs="cdn", div_id="charts")
 
@@ -208,146 +226,328 @@ class ReportGenerator:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Vulnerability Report</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+        /* Dark Theme with Muted Pastels */
+        :root {
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --bg-hover: #2f334d;
+            --color-primary: #7aa2f7;
+            --color-success: #9ece6a;
+            --color-warning: #e0af68;
+            --color-danger: #f7768e;
+            --color-critical: #f7768e;
+            --color-high: #ff9e64;
+            --color-medium: #e0af68;
+            --color-low: #7aa2f7;
+            --color-info: #565f89;
+            --text-primary: #c0caf5;
+            --text-secondary: #9aa5ce;
+            --border-color: #414868;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
         }
+
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
             padding: 40px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
-        h1 { font-size: 2.5em; margin-bottom: 10px; }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
         .metadata {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+            background: rgba(122, 162, 247, 0.1);
+            border: 1px solid rgba(122, 162, 247, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 24px;
         }
+
+        .metadata p {
+            margin: 8px 0;
+            color: var(--text-primary);
+        }
+
         .summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 24px;
+            margin-bottom: 32px;
         }
+
         .summary-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-left: 4px solid #667eea;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-left: 4px solid var(--color-primary);
+            transition: all 0.2s;
         }
-        .summary-card h3 { color: #667eea; margin-bottom: 10px; }
+
+        .summary-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .summary-card h3 {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
         .summary-card .number {
             font-size: 2.5em;
-            font-weight: bold;
-            color: #333;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
-        .severity-critical { border-left-color: #dc3545; color: #dc3545; }
-        .severity-high { border-left-color: #fd7e14; color: #fd7e14; }
-        .severity-medium { border-left-color: #ffc107; color: #ffc107; }
-        .severity-low { border-left-color: #17a2b8; color: #17a2b8; }
+
+        .summary-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .severity-critical { border-left-color: var(--color-critical); }
+        .severity-critical h3 { color: var(--color-critical); }
+
+        .severity-high { border-left-color: var(--color-high); }
+        .severity-high h3 { color: var(--color-high); }
+
+        .severity-medium { border-left-color: var(--color-medium); }
+        .severity-medium h3 { color: var(--color-medium); }
+
+        .severity-low { border-left-color: var(--color-low); }
+        .severity-low h3 { color: var(--color-low); }
+
         .charts {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+
         .vulnerabilities {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+
+        .vulnerabilities h2 {
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .vuln-item {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.2s;
         }
+
         .vuln-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 1px var(--color-primary);
         }
+
         .vuln-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
+
         .vuln-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
+
         .badge {
             display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-left: 10px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
         }
-        .badge-critical { background: #dc3545; color: white; }
-        .badge-high { background: #fd7e14; color: white; }
-        .badge-medium { background: #ffc107; color: #333; }
-        .badge-low { background: #17a2b8; color: white; }
-        .badge-info { background: #6c757d; color: white; }
+
+        .badge-critical {
+            background: rgba(247, 118, 142, 0.15);
+            color: var(--color-critical);
+            border: 1px solid rgba(247, 118, 142, 0.3);
+        }
+
+        .badge-high {
+            background: rgba(255, 158, 100, 0.15);
+            color: var(--color-high);
+            border: 1px solid rgba(255, 158, 100, 0.3);
+        }
+
+        .badge-medium {
+            background: rgba(224, 175, 104, 0.15);
+            color: var(--color-medium);
+            border: 1px solid rgba(224, 175, 104, 0.3);
+        }
+
+        .badge-low {
+            background: rgba(122, 162, 247, 0.15);
+            color: var(--color-low);
+            border: 1px solid rgba(122, 162, 247, 0.3);
+        }
+
+        .badge-info {
+            background: rgba(86, 95, 137, 0.15);
+            color: var(--color-info);
+            border: 1px solid rgba(86, 95, 137, 0.3);
+        }
+
         .vuln-details {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: var(--bg-hover);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border: 1px solid var(--border-color);
         }
+
         .vuln-details p {
+            margin: 10px 0;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .vuln-details strong {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .code-snippet {
+            background: #16161e;
+            color: #c0caf5;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            margin: 16px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .remediation {
+            background: rgba(158, 206, 106, 0.1);
+            border: 1px solid rgba(158, 206, 106, 0.3);
+            border-left: 4px solid var(--color-success);
+            padding: 20px;
+            margin-top: 16px;
+            border-radius: 8px;
+        }
+
+        .remediation h4 {
+            color: var(--color-success);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remediation p {
+            color: var(--text-primary);
             margin: 8px 0;
         }
-        .code-snippet {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            margin: 10px 0;
-        }
-        .remediation {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .remediation h4 {
-            color: #155724;
-            margin-bottom: 10px;
-        }
+
         footer {
             text-align: center;
-            padding: 20px;
-            color: #6c757d;
-            margin-top: 40px;
+            padding: 32px 24px;
+            color: var(--text-secondary);
+            margin-top: 48px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            header {
+                padding: 24px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .vuln-item {
+                padding: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🔒 Security Vulnerability Report</h1>
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Security Vulnerability Report
+            </h1>
             <p>Comprehensive security analysis and risk assessment</p>
             <div class="metadata">
                 <p><strong>Repository:</strong> {{ metadata.get('repo_path', 'N/A') }}</p>
@@ -384,17 +584,22 @@ class ReportGenerator:
         </div>
 
         <div class="vulnerabilities">
-            <h2 style="margin-bottom: 20px;">📋 Detailed Findings</h2>
+            <h2>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                Detailed Findings
+            </h2>
             {% for vuln in vulnerabilities[:50] %}
             <div class="vuln-item">
                 <div class="vuln-header">
                     <div>
-                        <span class="vuln-title">{{ vuln.get('issue', vuln.get('type', 'Unknown Issue')) }}</span>
+                        <div class="vuln-title">{{ vuln.get('issue', vuln.get('type', 'Unknown Issue')) }}</div>
                         <span class="badge badge-{{ vuln.get('severity', 'info').lower() }}">
                             {{ vuln.get('severity', 'INFO') }}
                         </span>
                         {% if vuln.get('risk_score') %}
-                        <span class="badge" style="background: #6f42c1; color: white;">
+                        <span class="badge" style="background: rgba(187, 154, 247, 0.15); color: #bb9af7;">
                             Risk Score: {{ "%.1f"|format(vuln.risk_score) }}
                         </span>
                         {% endif %}
@@ -424,7 +629,13 @@ class ReportGenerator:
 
                 {% if vuln.get('remediation') %}
                 <div class="remediation">
-                    <h4>🔧 Remediation</h4>
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Remediation
+                    </h4>
                     <p>{{ vuln.remediation.get('description', 'N/A') }}</p>
                     {% if vuln.remediation.get('fix_complexity') %}
                     <p><strong>Complexity:</strong> {{ vuln.remediation.fix_complexity }}</p>
@@ -434,7 +645,7 @@ class ReportGenerator:
             </div>
             {% endfor %}
             {% if vulnerabilities|length > 50 %}
-            <p style="text-align: center; margin-top: 20px; color: #6c757d;">
+            <p style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 14px;">
                 Showing top 50 vulnerabilities. See JSON report for complete details.
             </p>
             {% endif %}
