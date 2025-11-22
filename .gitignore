@@ -44,9 +44,9 @@ htmlcov/
 .env
 .env.local
 
-# Models
-*.pkl
-*.joblib
+# Models (uncommenting to include pre-trained models in repo)
+# *.pkl
+# *.joblib
 
 # Reports
 reports/
