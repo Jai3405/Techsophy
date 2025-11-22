@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner Dashboard</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           DESIGN SYSTEM - Dark Theme with Muted Pastels
+           ═══════════════════════════════════════════════════════════ */
+
+        :root {
+            /* Color Palette */
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --bg-hover: #2f334d;
+
+            --color-primary: #7aa2f7;
+            --color-primary-hover: #89b4f8;
+            --color-success: #9ece6a;
+            --color-warning: #e0af68;
+            --color-danger: #f7768e;
+
+            --text-primary: #c0caf5;
+            --text-secondary: #9aa5ce;
+            --text-muted: #565f89;
+
+            --border-color: #414868;
+            --border-hover: #7aa2f7;
+
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro', 'Segoe UI', system-ui, sans-serif;
+
+            /* Spacing */
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-pill: 100px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+
+            /* Transitions */
+            --transition: 200ms ease;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESET & BASE STYLES
+           ═══════════════════════════════════════════════════════════ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           HEADER
+           ═══════════════════════════════════════════════════════════ */
+
+        .header {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+        }
+
+        .header .actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .header .actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            background: rgba(122, 162, 247, 0.15);
+            border: 1px solid rgba(122, 162, 247, 0.3);
+            color: var(--color-primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all var(--transition);
+        }
+
+        .header .actions a:hover {
+            background: rgba(122, 162, 247, 0.25);
+            border-color: var(--color-primary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           STATS GRID
+           ═══════════════════════════════════════════════════════════ */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto var(--spacing-md);
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Different colors for each stat */
+        .stat-card:nth-child(1) .icon { color: var(--color-primary); }
+        .stat-card:nth-child(2) .icon { color: var(--color-success); }
+        .stat-card:nth-child(3) .icon { color: var(--color-warning); }
+        .stat-card:nth-child(4) .icon { color: var(--color-danger); }
+
+        /* ═══════════════════════════════════════════════════════════
+           SECTIONS
+           ═══════════════════════════════════════════════════════════ */
+
+        .section {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .section h2 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TABLES
+           ═══════════════════════════════════════════════════════════ */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: var(--bg-hover);
+            padding: var(--spacing-md);
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        table tr:hover {
+            background: var(--bg-hover);
+        }
+
+        table code {
+            background: var(--bg-hover);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--color-primary);
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           BADGES
+           ═══════════════════════════════════════════════════════════ */
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.queued {
+            background: rgba(224, 175, 104, 0.15);
+            color: var(--color-warning);
+        }
+
+        .badge.running {
+            background: rgba(122, 162, 247, 0.15);
+            color: var(--color-primary);
+        }
+
+        .badge.completed {
+            background: rgba(158, 206, 106, 0.15);
+            color: var(--color-success);
+        }
+
+        .badge.failed {
+            background: rgba(247, 118, 142, 0.15);
+            color: var(--color-danger);
+        }
+
+        .badge.html {
+            background: rgba(122, 162, 247, 0.15);
+            color: var(--color-primary);
+        }
+
+        .badge.json {
+            background: rgba(224, 175, 104, 0.15);
+            color: var(--color-warning);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           BUTTONS
+           ═══════════════════════════════════════════════════════════ */
+
+        .btn-small {
+            padding: 6px 12px;
+            background: var(--color-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: var(--spacing-xs);
+            transition: all var(--transition);
+        }
+
+        .btn-small:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-small.danger {
+            background: transparent;
+            border: 1px solid var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        .btn-small.danger:hover {
+            background: rgba(247, 118, 142, 0.15);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           EMPTY STATE
+           ═══════════════════════════════════════════════════════════ */
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--text-secondary);
+        }
+
+        .empty-state .icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .empty-state a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .empty-state a:hover {
+            color: var(--color-primary-hover);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           REFRESH BUTTON
+           ═══════════════════════════════════════════════════════════ */
+
+        .refresh-btn {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            right: var(--spacing-xl);
+            width: 56px;
+            height: 56px;
+            background: var(--color-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.1);
+            background: var(--color-primary-hover);
+        }
+
+        .refresh-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════════════════ */
+
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-md);
+            }
+
+            .header {
+                padding: var(--spacing-lg);
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th,
+            table td {
+                padding: var(--spacing-sm);
+            }
+
+            .refresh-btn {
+                bottom: var(--spacing-lg);
+                right: var(--spacing-lg);
+                width: 48px;
+                height: 48px;
+            }
+
+            .refresh-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Security Scanner Dashboard
+        </h1>
+        <p>Monitor and manage your security scans</p>
+        <div class="actions">
+            <a href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>New Scan</span>
+            </a>
+            <a href="/docs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>API Docs</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="stats" id="stats">
+        <div class="stat-card">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <div class="value" id="totalScans">-</div>
+            <div class="label">Total Scans</div>
+        </div>
+        <div class="stat-card">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="value" id="completedScans">-</div>
+            <div class="label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="value" id="runningScans">-</div>
+            <div class="label">Running</div>
+        </div>
+        <div class="stat-card">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <div class="value" id="totalReports">-</div>
+            <div class="label">Reports</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Recent Scans</h2>
+        <div id="scansTable">
+            <div class="empty-state">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <p>Loading scans...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Available Reports</h2>
+        <div id="reportsTable">
+            <div class="empty-state">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+                <p>Loading reports...</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="loadData()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+    </button>
+
+    <script>
+        async function loadData() {
+            await Promise.all([loadScans(), loadReports()]);
+        }
+
+        async function loadScans() {
+            try {
+                const response = await fetch('/api/scans');
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('totalScans').textContent = data.total;
+                document.getElementById('completedScans').textContent =
+                    data.scans.filter(s => s.status === 'completed').length;
+                document.getElementById('runningScans').textContent =
+                    data.scans.filter(s => s.status === 'running').length;
+
+                // Render table
+                const scansTable = document.getElementById('scansTable');
+
+                if (data.scans.length === 0) {
+                    scansTable.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                            </svg>
+                            <p>No scans yet. <a href="/">Start your first scan!</a></p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                scansTable.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Job ID</th>
+                                <th>Repository</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.scans.map(scan => `
+                                <tr>
+                                    <td><code>${scan.id}</code></td>
+                                    <td>${scan.repo_path}</td>
+                                    <td><span class="badge ${scan.status}">${scan.status}</span></td>
+                                    <td>${new Date(scan.created_at).toLocaleString()}</td>
+                                    <td>
+                                        ${scan.status === 'completed' && scan.report_files.length > 0 ?
+                                            scan.report_files.map(file =>
+                                                file.endsWith('.html') ?
+                                                `<a href="/reports/${file}" target="_blank" class="btn-small">View</a>` :
+                                                `<a href="/api/reports/${file}" class="btn-small">Download</a>`
+                                            ).join('')
+                                            : ''}
+                                        <button onclick="deleteScan('${scan.id}')" class="btn-small danger">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading scans:', error);
+                document.getElementById('scansTable').innerHTML = `
+                    <div class="empty-state">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>Error loading scans: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadReports() {
+            try {
+                const response = await fetch('/api/reports');
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('totalReports').textContent = data.total;
+
+                // Render table
+                const reportsTable = document.getElementById('reportsTable');
+
+                if (data.reports.length === 0) {
+                    reportsTable.innerHTML = `
+                        <div class="empty-state">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                            </svg>
+                            <p>No reports available yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                reportsTable.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.reports.map(report => `
+                                <tr>
+                                    <td>${report.filename}</td>
+                                    <td><span class="badge ${report.type}">${report.type.toUpperCase()}</span></td>
+                                    <td>${formatFileSize(report.size)}</td>
+                                    <td>${new Date(report.created_at).toLocaleString()}</td>
+                                    <td>
+                                        ${report.type === 'html' ?
+                                            `<a href="/reports/${report.filename}" target="_blank" class="btn-small">View</a>` :
+                                            `<a href="/api/reports/${report.filename}" class="btn-small">Download</a>`
+                                        }
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                document.getElementById('reportsTable').innerHTML = `
+                    <div class="empty-state">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p>Error loading reports: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function deleteScan(jobId) {
+            if (!confirm(`Delete scan ${jobId}?`)) return;
+
+            try {
+                await fetch(`/api/scan/${jobId}`, { method: 'DELETE' });
+                loadScans();
+            } catch (error) {
+                alert(`Error deleting scan: ${error.message}`);
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Load data on page load
+        loadData();
+
+        // Auto-refresh every 5 seconds if there are running scans
+        setInterval(async () => {
+            const response = await fetch('/api/scans');
+            const data = await response.json();
+            const hasRunningScans = data.scans.some(s => s.status === 'running' || s.status === 'queued');
+
+            if (hasRunningScans) {
+                loadData();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
