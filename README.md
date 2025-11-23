@@ -41,9 +41,9 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 <div align="center">
 
-[![Video Demo](Interfaces/Screenshot%202025-11-23%20at%204.31.06%E2%80%AFAM.png)](https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov)
+[![Demo Video](https://img.youtube.com/vi/9krDCTwzyjI/maxresdefault.jpg)](https://youtu.be/9krDCTwzyjI)
 
-**[▶ Watch Full Demo Video](https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov)** - Complete platform walkthrough showcasing all features
+**[▶ Watch Full Demo Video](https://youtu.be/9krDCTwzyjI)** - Complete platform walkthrough showcasing all features
 
 </div>
 
