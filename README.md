@@ -45,7 +45,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Home - Scan Launcher**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.31.06 AM.png" alt="Home Page" width="100%"/>
+![Home Page](Interfaces/Screenshot%202025-11-23%20at%204.31.06%20AM.png)
 
 *Professional dark theme with intuitive scan configuration*
 
@@ -54,7 +54,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Scan Results - Success Card**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.31.49 AM.png" alt="Scan Results" width="100%"/>
+![Scan Results](Interfaces/Screenshot%202025-11-23%20at%204.31.49%20AM.png)
 
 *Animated success card with direct links to reports*
 
@@ -65,7 +65,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Dashboard - Real-Time Monitoring**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.32.27 AM.png" alt="Dashboard" width="100%"/>
+![Dashboard](Interfaces/Screenshot%202025-11-23%20at%204.32.27%20AM.png)
 
 *Live scan status tracking with auto-refresh capability*
 
@@ -74,7 +74,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Vulnerability Report - Interactive Analysis**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.32.46 AM.png" alt="Vulnerability Report" width="100%"/>
+![Vulnerability Report](Interfaces/Screenshot%202025-11-23%20at%204.32.46%20AM.png)
 
 *Dark-themed HTML reports with Plotly visualizations*
 
@@ -85,7 +85,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Detailed Findings - Severity Breakdown**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.33.17 AM.png" alt="Report Details" width="100%"/>
+![Report Details](Interfaces/Screenshot%202025-11-23%20at%204.33.17%20AM.png)
 
 *Color-coded severity levels with distinct visual hierarchy*
 
@@ -94,7 +94,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Remediation Guidance - Code Examples**
 
-<img src="Interfaces/Screenshot 2025-11-23 at 4.33.53 AM.png" alt="Remediation Guide" width="100%"/>
+![Remediation Guide](Interfaces/Screenshot%202025-11-23%20at%204.33.53%20AM.png)
 
 *Actionable fix recommendations with code snippets*
 
@@ -335,14 +335,6 @@ False Negatives: <5% (critical for security)
 - exploit/asset ratio
 - severity/confidence ratio
 - is_critical, is_high_exploit, is_high_confidence (boolean flags)
-
-| Feature | Range | Weight | Impact |
-|---------|-------|--------|--------|
-| Severity Level | 0-4 | High | ⭐⭐⭐⭐⭐ |
-| Exploitability | 0-10 | High | ⭐⭐⭐⭐⭐ |
-| Severity × Exploitability | 0-40 | High | ⭐⭐⭐⭐ |
-| Confidence Score | 1-3 | Medium | ⭐⭐⭐ |
-| Asset Value | 0-10 | Medium | ⭐⭐⭐ |
 
 ---
 
