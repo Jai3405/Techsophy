@@ -37,6 +37,10 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 ## Live Demo
 
+### Video Demonstration
+
+**[Watch Full Demo Video](https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov)** - Complete platform walkthrough showcasing all features
+
 ### Web Interface Screenshots
 
 <table>
