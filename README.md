@@ -45,7 +45,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Home - Scan Launcher**
 
-![Home Page](Interfaces/Screenshot%202025-11-23%20at%204.31.06%20AM.png)
+![Home Page](Interfaces/Screenshot%202025-11-23%20at%204.31.06%E2%80%AFAM.png)
 
 *Professional dark theme with intuitive scan configuration*
 
@@ -54,7 +54,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Scan Results - Success Card**
 
-![Scan Results](Interfaces/Screenshot%202025-11-23%20at%204.31.49%20AM.png)
+![Scan Results](Interfaces/Screenshot%202025-11-23%20at%204.31.49%E2%80%AFAM.png)
 
 *Animated success card with direct links to reports*
 
@@ -65,7 +65,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Dashboard - Real-Time Monitoring**
 
-![Dashboard](Interfaces/Screenshot%202025-11-23%20at%204.32.27%20AM.png)
+![Dashboard](Interfaces/Screenshot%202025-11-23%20at%204.32.27%E2%80%AFAM.png)
 
 *Live scan status tracking with auto-refresh capability*
 
@@ -74,7 +74,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Vulnerability Report - Interactive Analysis**
 
-![Vulnerability Report](Interfaces/Screenshot%202025-11-23%20at%204.32.46%20AM.png)
+![Vulnerability Report](Interfaces/Screenshot%202025-11-23%20at%204.32.46%E2%80%AFAM.png)
 
 *Dark-themed HTML reports with Plotly visualizations*
 
@@ -85,7 +85,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Detailed Findings - Severity Breakdown**
 
-![Report Details](Interfaces/Screenshot%202025-11-23%20at%204.33.17%20AM.png)
+![Report Details](Interfaces/Screenshot%202025-11-23%20at%204.33.17%E2%80%AFAM.png)
 
 *Color-coded severity levels with distinct visual hierarchy*
 
@@ -94,7 +94,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 **Remediation Guidance - Code Examples**
 
-![Remediation Guide](Interfaces/Screenshot%202025-11-23%20at%204.33.53%20AM.png)
+![Remediation Guide](Interfaces/Screenshot%202025-11-23%20at%204.33.53%E2%80%AFAM.png)
 
 *Actionable fix recommendations with code snippets*
 
