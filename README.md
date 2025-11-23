@@ -40,11 +40,11 @@ CLI only                      ✓    Beautiful web interface + REST API
 ### Video Demonstration
 
 <div align="center">
-  <video width="100%" controls>
-    <source src="https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <p><em>Complete platform walkthrough showcasing all features</em></p>
+
+[![Video Demo](Interfaces/Screenshot%202025-11-23%20at%204.31.06%E2%80%AFAM.png)](https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov)
+
+**[▶ Watch Full Demo Video](https://github.com/Jai3405/Techsophy/releases/download/v1.0.0/Screen.Recording.2025-11-23.at.4.35.05.AM.mov)** - Complete platform walkthrough showcasing all features
+
 </div>
 
 ### Web Interface Screenshots
