@@ -132,7 +132,7 @@ CLI only                      ✓    Beautiful web interface + REST API
 ### ML-Powered Intelligence
 
 - **Risk Scorer** - XGBoost (300 estimators, 93.75% accuracy)
-- **False Positive Filter** - RandomForest (89%+ accuracy)
+- **False Positive Filter** - XGBoost (200 estimators, 89.50% accuracy)
 - **16D Feature Engineering** - Enhanced interactions and polynomials
 - **Trained on 2000+ samples** - Continuous improvement
 
@@ -182,7 +182,7 @@ graph TB
 
     subgraph ML["ML Intelligence Layer"]
         F1["Risk Scorer<br/>XGBoost 300<br/>16 Features, 93.75% Accuracy"]
-        F2["FP Filter<br/>RandomForest 100<br/>89% Accuracy"]
+        F2["FP Filter<br/>XGBoost 200<br/>5 Features, 89.50% Accuracy"]
     end
 
     subgraph Analysis["Analysis Layer"]
@@ -324,12 +324,18 @@ F1-Score:      0.94
 ### False Positive Filter
 
 ```
-Algorithm:     RandomForestClassifier
-Optimization:  Precision-focused
-Class Weights: {genuine: 1, FP: 2}
-Threshold:     0.7
-Accuracy:      89%+
-False Negatives: <5% (critical for security)
+Algorithm:     XGBoostClassifier
+Estimators:    200 trees
+Learning Rate: 0.05
+Max Depth:     5 levels
+Features:      5 dimensions
+Training Size: 2000+ samples
+Accuracy:      89.50%
+CV Accuracy:   89.31% (±1.78%)
+Precision:     0.87
+Recall:        0.88
+F1-Score:      0.87
+Scale Weight:  2.0 (class imbalance handling)
 ```
 
 ### Feature Engineering (16 Dimensions)

@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 import numpy as np
 import joblib
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 from ..utils.logger import get_logger
 
@@ -22,7 +22,7 @@ class FalsePositiveFilter:
             model_path: Path to save/load model
         """
         self.model_path = Path(model_path)
-        self.model: RandomForestClassifier = None
+        self.model: XGBClassifier = None
         self.feature_names = [
             "confidence",
             "code_context_score",
@@ -219,8 +219,8 @@ class FalsePositiveFilter:
             return max(0.0, min(1.0, fp_prob))
 
     def _train_default_model(self):
-        """Train default model with synthetic data."""
-        logger.info("Training default false positive filter")
+        """Train default model with synthetic data using XGBoost."""
+        logger.info("Training XGBoost false positive filter")
 
         np.random.seed(42)
         n_samples = 2000
@@ -229,7 +229,7 @@ class FalsePositiveFilter:
         y_train = []
 
         for _ in range(n_samples):
-            # Generate features
+            # Generate features with realistic distributions
             confidence = np.random.randint(1, 4)
             code_context = np.random.uniform(0, 10)
             pattern_match = np.random.uniform(0, 10)
@@ -263,23 +263,29 @@ class FalsePositiveFilter:
         X_train = np.array(X_train)
         y_train = np.array(y_train)
 
-        # Train RandomForest (optimize for precision)
-        self.model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=8,
-            min_samples_split=10,
-            min_samples_leaf=5,
-            class_weight={0: 1, 1: 2},  # Penalize false positive misclassification
+        # Train XGBoost (optimized for precision - minimize false negatives)
+        self.model = XGBClassifier(
+            n_estimators=200,           # More trees for better accuracy
+            max_depth=5,                # Controlled depth to prevent overfitting
+            learning_rate=0.05,         # Conservative learning rate
+            subsample=0.8,              # Row sampling for robustness
+            colsample_bytree=0.8,       # Column sampling for feature diversity
+            gamma=0.1,                  # Minimum loss reduction for split
+            min_child_weight=3,         # Minimum instance weight in child
+            reg_alpha=0.1,              # L1 regularization
+            reg_lambda=1.0,             # L2 regularization
+            scale_pos_weight=2.0,       # Handle class imbalance (penalize FP misclassification)
             random_state=42,
-            n_jobs=-1,
+            eval_metric='logloss',
+            use_label_encoder=False,
         )
 
-        self.model.fit(X_train, y_train)
+        self.model.fit(X_train, y_train, verbose=False)
 
         # Save model
         self.save_model()
 
-        logger.info("False positive filter trained successfully")
+        logger.info("XGBoost false positive filter trained successfully")
 
     def save_model(self):
         """Save model to disk."""
