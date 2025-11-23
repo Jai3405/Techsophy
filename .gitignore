@@ -59,3 +59,7 @@ reports/*.pdf
 # Database
 *.db
 *.sqlite3
+
+# Large demo files
+Interfaces/*.mov
+Interfaces/*.mp4
