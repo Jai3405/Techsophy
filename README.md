@@ -41,9 +41,11 @@ CLI only                      ✓    Beautiful web interface + REST API
 
 <div align="center">
 
-[![Demo Video](https://img.youtube.com/vi/9krDCTwzyjI/maxresdefault.jpg)](https://youtu.be/9krDCTwzyjI)
+<a href="https://youtu.be/9krDCTwzyjI" target="_blank">
+  <img src="https://img.youtube.com/vi/9krDCTwzyjI/maxresdefault.jpg" alt="Demo Video" style="width:100%; max-width:800px; border-radius:12px; cursor:pointer;" />
+</a>
 
-**[▶ Watch Full Demo Video](https://youtu.be/9krDCTwzyjI)** - Complete platform walkthrough showcasing all features
+**[▶️ Watch Full Demo Video (YouTube)](https://youtu.be/9krDCTwzyjI)** - Complete platform walkthrough showcasing all features
 
 </div>
 
